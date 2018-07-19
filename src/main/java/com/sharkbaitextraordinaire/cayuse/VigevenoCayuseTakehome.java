@@ -1,6 +1,7 @@
 package com.sharkbaitextraordinaire.cayuse;
 
 import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapFetcher;
+import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapResponse;
 
 import java.io.*;
 import java.util.Properties;
@@ -22,14 +23,21 @@ public class VigevenoCayuseTakehome {
         // Create object to look up elevation at location
         // Get input zip code
         if (args.length > 0) {
-            System.out.println(args[0]);
-            // Look up city and weather
+            String zipcode = args[0];
+            System.out.println(zipcode);
+            // Validate zip code before we look up city and weather
+            if(!weather.isValidZipCode(zipcode)) {
+                System.out.printf("%s is not a valid zip code", zipcode);
+                return;
+            }
+            OpenweathermapResponse owmResponse = weather.fetch(zipcode);
+            System.out.printf("At the location %s, the temperature is %s\n", owmResponse.getCityName(), owmResponse.getTemperature());
             // Look up timezone
             // Look up location
             // Assemble and print output
         } else {
             // TODO print usage message when no arguments
-            System.out.println("Hello World!");
+            System.out.println("No zip codes provided to check");
         }
     }
 
@@ -63,7 +71,7 @@ public class VigevenoCayuseTakehome {
                 FileInputStream configStream = new FileInputStream(new File(configFilePath));
                 configurationProperties.load(configStream);
             } catch (IOException e) {
-                System.err.println(String.format("Failed to load specified properties file at %s, loading default properties", configFilePath));
+                System.err.println(String.format("Failed to load specified properties file at %s, loading default properties\n", configFilePath));
                 loadDefaultProperties();
             }
         }

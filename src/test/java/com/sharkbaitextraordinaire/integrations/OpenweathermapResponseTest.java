@@ -46,5 +46,10 @@ public class OpenweathermapResponseTest {
         OpenweathermapResponse r = mapper.readValue(testResponseString, OpenweathermapResponse.class);
         assertEquals("Mountain View", r.getCityName());
         assertEquals(Double.valueOf(285.68), r.getTemperature());
+
+        Double lon = r.getLocation().getCoordinates().getLongitude();
+        Double lat = r.getLocation().getCoordinates().getLatitude();
+        assertEquals(Double.valueOf(-122.09), lon);
+        assertEquals(Double.valueOf(37.39), lat);
     }
 }

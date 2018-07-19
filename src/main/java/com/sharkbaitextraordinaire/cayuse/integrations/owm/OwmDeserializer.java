@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapResponse;
+import org.geojson.Point;
 
 import java.io.IOException;
 
@@ -25,6 +26,9 @@ public class OwmDeserializer extends StdDeserializer<OpenweathermapResponse> {
         String cityName = root.get("name").asText();
         Double temperature = root.get("main").get("temp").asDouble();
 
-        return new OpenweathermapResponse(cityName, temperature);
+        Point location = new Point(root.get("coord").get("lon").asDouble(),
+                root.get("coord").get("lat").asDouble());
+
+        return new OpenweathermapResponse(cityName, temperature, location);
     }
 }
