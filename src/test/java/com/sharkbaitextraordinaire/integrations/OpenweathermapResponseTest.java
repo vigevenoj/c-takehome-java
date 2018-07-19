@@ -1,6 +1,9 @@
 package com.sharkbaitextraordinaire.integrations;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapResponse;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -29,16 +32,19 @@ public class OpenweathermapResponseTest {
 
     @Test
     public void getWeatherAndCityNameFromResponseTest() throws Exception {
-        HashMap<String, Object> r = mapper.readValue(testResponseString, HashMap.class);
-        assertNotNull(r);
 
-        String cityName = (String) r.get("name");
-        assertNotNull(cityName);
-        assertEquals(cityName, "Mountain View");
+        JsonNode root = mapper.readTree(testResponseString);
+        String cityName = root.get("name").asText();
+        assertEquals("Mountain View", cityName);
 
-        HashMap<String, Object> weatherMap  = (HashMap<String, Object>) r.get("main");
-        Double temperature = (Double) weatherMap.get("temp");
-        assertNotNull(temperature);
-        assertEquals(temperature, Double.valueOf(285.68));
+        Double temperature = root.get("main").get("temp").asDouble();
+        assertEquals(Double.valueOf(285.68), temperature);
+    }
+
+    @Test
+    public void deserializeWithCustomDeserializerTest() throws Exception {
+        OpenweathermapResponse r = mapper.readValue(testResponseString, OpenweathermapResponse.class);
+        assertEquals("Mountain View", r.getCityName());
+        assertEquals(Double.valueOf(285.68), r.getTemperature());
     }
 }

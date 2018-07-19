@@ -1,6 +1,6 @@
 package com.sharkbaitextraordinaire.cayuse;
 
-import com.sharkbaitextraordinaire.cayuse.integrations.OpenweathermapFetcher;
+import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapFetcher;
 
 import java.io.*;
 import java.util.Properties;

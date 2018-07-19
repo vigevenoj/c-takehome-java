@@ -1,4 +1,4 @@
-package com.sharkbaitextraordinaire.cayuse.integrations;
+package com.sharkbaitextraordinaire.cayuse.integrations.owm;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
