@@ -1,1 +1,4 @@
+# IntelliJ files
 .idea/*
+# Local configuration file with API keys
+local.properties
