@@ -1,6 +1,6 @@
 package com.sharkbaitextraordinaire.cayuse;
 
-import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapFetcher;
+import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapClient;
 import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapResponse;
 
 import java.io.*;
@@ -18,7 +18,7 @@ public class VigevenoCayuseTakehome {
         // Load up configuration (secrets like api keys, etc)
         loadProperties();
         // Create object to look up city and weather for zip code
-        OpenweathermapFetcher weather = new OpenweathermapFetcher(configurationProperties.getProperty("openweathermap.apikey"));
+        OpenweathermapClient weather = new OpenweathermapClient(configurationProperties.getProperty("openweathermap.apikey"));
         // Create object to look up timezone for location
         // Create object to look up elevation at location
         // Get input zip code
@@ -30,7 +30,7 @@ public class VigevenoCayuseTakehome {
                 System.out.printf("%s is not a valid zip code", zipcode);
                 return;
             }
-            OpenweathermapResponse owmResponse = weather.fetch(zipcode);
+            OpenweathermapResponse owmResponse = weather.getInfoForZipCode(zipcode);
             if (null == owmResponse) {
                 System.err.println("There was a problem fetching the weather data");
                 return;

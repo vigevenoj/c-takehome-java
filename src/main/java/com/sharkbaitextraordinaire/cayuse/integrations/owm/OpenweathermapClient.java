@@ -12,13 +12,13 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 
-public class OpenweathermapFetcher {
+public class OpenweathermapClient {
 
     private String apiKey = "";
     private ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     private static String API_URL = "https://api.openweathermap.org/data/2.5/weather?zip=%s,us&APPID=%s";
 
-    public OpenweathermapFetcher(String ApiKey) {
+    public OpenweathermapClient(String ApiKey) {
         this.apiKey = ApiKey;
 
     }
@@ -34,7 +34,7 @@ public class OpenweathermapFetcher {
      * @param zipcode
      * @return An OpenweathermapResponse or null
      */
-    public OpenweathermapResponse fetch(String zipcode) {
+    public OpenweathermapResponse getInfoForZipCode(String zipcode) {
         // should probably fail if we can't validate the zip code
         Configuration configuration = new ClientConfig();
         JerseyClient client = JerseyClientBuilder.createClient(configuration);
