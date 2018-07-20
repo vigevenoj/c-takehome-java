@@ -1,3 +1,11 @@
+# Instructions to run the program
+Running the application requires Java 8 and Maven to be installed.
+
+1. Clone repository, `foo`
+1. Create a Java properties file with API keys for the services. A sample without keys is present as `default.properties`
+1. Build the project via `mvn clean package`
+1. Run the jar. Provide the configuration file as a VM argument and the zip code as an argument to the program, ie, `java -DconfigFile=default.properties target/cayuse-takehome-1.0-SNAPSHOT-jar-with-dependencies.jar 97206`
+
 # Assignment
 Create a utility using the language/tools of your choice that takes a ZIP-code, then outputs the city name, current temperature, time zone, and general elevation at the location with a user-friendly message. For example, “At the location $CITY\_NAME, the temperature is $TEMPERATURE, the timezone is $TIMEZONE, and the elevation is $ELEVATION”.
 
