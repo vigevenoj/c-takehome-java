@@ -31,6 +31,10 @@ public class VigevenoCayuseTakehome {
                 return;
             }
             OpenweathermapResponse owmResponse = weather.fetch(zipcode);
+            if (null == owmResponse) {
+                System.err.println("There was a problem fetching the weather data");
+                return;
+            }
             System.out.printf("At the location %s, the temperature is %s\n", owmResponse.getCityName(), owmResponse.getTemperature());
             // Look up timezone
             // Look up location
