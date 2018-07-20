@@ -13,18 +13,25 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.time.Instant;
 
 public class TimezoneClient {
 
     private String apiKey = "";
     private ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    private static String API_URL = "https://maps.googleapis.com/maps/api/timezone/json?location=%s,%s&key=%s";
+    private static String API_URL = "https://maps.googleapis.com/maps/api/timezone/json?location=%s,%s&timestamp=%s&key=%s";
 
     public TimezoneClient(String apiKey) {
         this.apiKey = apiKey;
     }
 
+    /**
+     * Fetch a response from the Google Timezone API and parse out the name of the timezone
+     * @param location A geojson point with latitude & longitude
+     * @return The name of the time zone containing the point
+     */
     public String getTimezoneNameForLocation(Point location) {
+
         Configuration configuration = new ClientConfig();
         JerseyClient client = JerseyClientBuilder.createClient(configuration);
         JerseyWebTarget target = client.target(
@@ -32,7 +39,10 @@ public class TimezoneClient {
                 API_URL,
                 location.getCoordinates().getLatitude(),
                 location.getCoordinates().getLongitude(),
+                Instant.now().getEpochSecond(),
                 apiKey));
+
+        System.out.printf("Using %s as uri\n", target.getUri());
 
         Invocation.Builder invocationBuilder = target.request();
         Response response = invocationBuilder.get();

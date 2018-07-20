@@ -1,7 +1,9 @@
 package com.sharkbaitextraordinaire.cayuse;
 
+import com.sharkbaitextraordinaire.cayuse.integrations.elevation.ElevationClient;
 import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapClient;
 import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapResponse;
+import com.sharkbaitextraordinaire.cayuse.integrations.timezone.TimezoneClient;
 
 import java.io.*;
 import java.util.Properties;
@@ -17,15 +19,18 @@ public class VigevenoCayuseTakehome {
     public static void main( String[] args ) {
         // Load up configuration (secrets like api keys, etc)
         loadProperties();
-        // Create object to look up city and weather for zip code
+
+        // Create clients with proper keys to access APIs
         OpenweathermapClient weather = new OpenweathermapClient(configurationProperties.getProperty("openweathermap.apikey"));
-        // Create object to look up timezone for location
-        // Create object to look up elevation at location
+        TimezoneClient tzClient = new TimezoneClient(configurationProperties.getProperty("google.timezone.apikey"));
+        ElevationClient elevationClient = new ElevationClient(configurationProperties.getProperty("google.elevation.apikey"));
+
         // Get input zip code
         if (args.length > 0) {
             String zipcode = args[0];
-            System.out.println(zipcode);
-            // Validate zip code before we look up city and weather
+            System.out.printf("Checking zip code %s\n", zipcode);
+
+            // Validate zip code looks right before we look up city and weather
             if(!weather.isValidZipCode(zipcode)) {
                 System.out.printf("%s is not a valid zip code", zipcode);
                 return;
@@ -35,10 +40,15 @@ public class VigevenoCayuseTakehome {
                 System.err.println("There was a problem fetching the weather data");
                 return;
             }
-            System.out.printf("At the location %s, the temperature is %s\n", owmResponse.getCityName(), owmResponse.getTemperature());
-            // Look up timezone
-            // Look up location
-            // Assemble and print output
+
+            String timezoneName = tzClient.getTimezoneNameForLocation(owmResponse.getLocation());
+            Double elevation = elevationClient.getElevationAtLocation(owmResponse.getLocation());
+
+            if (elevation != null) {
+                System.out.println(formatOutputWithElevation(owmResponse, timezoneName, elevation));
+            } else {
+                System.out.println(formatOutputWithoutElevation(owmResponse, timezoneName));
+            }
         } else {
             // TODO print usage message when no arguments
             System.out.println("No zip codes provided to check");
@@ -81,5 +91,15 @@ public class VigevenoCayuseTakehome {
         }
         // TODO validate that we have all three API keys and fail if not present
         System.out.println(validateConfigurationProperties());
+    }
+
+    private static String formatOutputWithElevation(OpenweathermapResponse owmResponse, String timezoneName, Double elevation) {
+        String text = "At the location %s, the temperature is %s, the timezone is %s, and the elevation is %f";
+        return String.format(text, owmResponse.getCityName(), owmResponse.getTemperature(), timezoneName, elevation);
+    }
+
+    private static String formatOutputWithoutElevation(OpenweathermapResponse owmResponse, String timezoneName) {
+        String text = "At the location %s, the temperature is %s, and the timezone is %s";
+        return String.format(text, owmResponse.getCityName(), owmResponse.getTemperature(), timezoneName);
     }
 }

@@ -40,6 +40,8 @@ public class OpenweathermapClient {
         JerseyClient client = JerseyClientBuilder.createClient(configuration);
         JerseyWebTarget target = client.target(String.format(API_URL, zipcode, apiKey));
 
+        System.out.printf("Using %s as uri\n", target.getUri());
+
         Invocation.Builder invocationBuilder = target.request();
         Response response = invocationBuilder.get();
 

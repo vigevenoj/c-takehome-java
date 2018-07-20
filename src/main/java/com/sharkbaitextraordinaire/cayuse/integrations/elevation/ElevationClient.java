@@ -24,6 +24,11 @@ public class ElevationClient {
         this.apiKey = apiKey;
     }
 
+    /**
+     *
+     * @param location A geojson point with latitude & longitude
+     * @return the elevation at the given point
+     */
     public Double getElevationAtLocation(Point location) {
         Configuration configuration = new ClientConfig();
         JerseyClient client = JerseyClientBuilder.createClient(configuration);
@@ -34,6 +39,7 @@ public class ElevationClient {
                         location.getCoordinates().getLongitude(),
                         apiKey));
 
+        System.out.printf("Using %s as uri\n", target.getUri());
 
         Invocation.Builder invocationBuilder = target.request();
         Response response = invocationBuilder.get();
