@@ -1,4 +1,4 @@
-package com.sharkbaitextraordinaire.integrations.elevation;
+package com.sharkbaitextraordinaire.cayuse.integrations.elevation;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

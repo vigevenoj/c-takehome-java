@@ -1,4 +1,4 @@
-package com.sharkbaitextraordinaire.integrations.timezone;
+package com.sharkbaitextraordinaire.cayuse.integrations.timezone;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

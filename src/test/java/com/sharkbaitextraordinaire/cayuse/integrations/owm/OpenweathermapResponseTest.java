@@ -1,13 +1,8 @@
-package com.sharkbaitextraordinaire.integrations.owm;
+package com.sharkbaitextraordinaire.cayuse.integrations.owm;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.sharkbaitextraordinaire.cayuse.integrations.owm.OpenweathermapResponse;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

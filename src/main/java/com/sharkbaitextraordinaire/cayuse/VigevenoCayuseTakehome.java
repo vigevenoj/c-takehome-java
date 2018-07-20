@@ -15,15 +15,18 @@ import java.util.Properties;
 public class VigevenoCayuseTakehome {
 
     private static Properties configurationProperties = new Properties();
+    static final String OpenweatherMapApiKeyPropertyName = "openweathermap.apikey";
+    static final String GoogleElevationApiKeyPropertyName = "google.elevation.apikey";
+    static final String GoogleTimezoneApiKeyPropertyName = "google.timezone.apikey";
 
     public static void main( String[] args ) {
         // Load up configuration (secrets like api keys, etc)
         loadProperties();
 
         // Create clients with proper keys to access APIs
-        OpenweathermapClient weather = new OpenweathermapClient(configurationProperties.getProperty("openweathermap.apikey"));
-        TimezoneClient tzClient = new TimezoneClient(configurationProperties.getProperty("google.timezone.apikey"));
-        ElevationClient elevationClient = new ElevationClient(configurationProperties.getProperty("google.elevation.apikey"));
+        OpenweathermapClient weather = new OpenweathermapClient(configurationProperties.getProperty(OpenweatherMapApiKeyPropertyName));
+        TimezoneClient tzClient = new TimezoneClient(configurationProperties.getProperty(GoogleElevationApiKeyPropertyName));
+        ElevationClient elevationClient = new ElevationClient(configurationProperties.getProperty(GoogleTimezoneApiKeyPropertyName));
 
         // Get input zip code
         if (args.length > 0) {
@@ -66,14 +69,13 @@ public class VigevenoCayuseTakehome {
         }
     }
 
-    private static boolean validateConfigurationProperties() {
-        // this returns true, fix it tomorrow
-        return (configurationProperties.containsKey("openweathermap.apikey") &&
-                configurationProperties.getProperty("openweathermap.apikey") != "" &&
-                configurationProperties.containsKey("google.timezone.apikey") &&
-                configurationProperties.getProperty("google.timezone.apikey") != "" &&
-                configurationProperties.containsKey("google.elevation.apikey") &&
-                configurationProperties.getProperty("google.elevation.apikey") != "");
+    static boolean validateConfigurationProperties(Properties props) {
+        return (props.containsKey(OpenweatherMapApiKeyPropertyName) &&
+                props.getProperty(OpenweatherMapApiKeyPropertyName) != "" &&
+                props.containsKey(GoogleTimezoneApiKeyPropertyName) &&
+                props.getProperty(GoogleTimezoneApiKeyPropertyName) != "" &&
+                props.containsKey(GoogleElevationApiKeyPropertyName) &&
+                props.getProperty(GoogleElevationApiKeyPropertyName) != "");
     }
 
     private static void loadProperties() {
@@ -89,8 +91,11 @@ public class VigevenoCayuseTakehome {
                 loadDefaultProperties();
             }
         }
-        // TODO validate that we have all three API keys and fail if not present
-        System.out.println(validateConfigurationProperties());
+        // validate that we have all three API keys and fail if not present
+        if(!validateConfigurationProperties(configurationProperties)) {
+            System.err.println("There was a problem with the configuration file. Missing key?");
+            System.exit(0);
+        }
     }
 
     private static String formatOutputWithElevation(OpenweathermapResponse owmResponse, String timezoneName, Double elevation) {

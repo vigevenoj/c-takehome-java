@@ -42,8 +42,6 @@ public class TimezoneClient {
                 Instant.now().getEpochSecond(),
                 apiKey));
 
-        System.out.printf("Using %s as uri\n", target.getUri());
-
         Invocation.Builder invocationBuilder = target.request();
         Response response = invocationBuilder.get();
 

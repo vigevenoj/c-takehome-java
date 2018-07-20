@@ -39,8 +39,6 @@ public class ElevationClient {
                         location.getCoordinates().getLongitude(),
                         apiKey));
 
-        System.out.printf("Using %s as uri\n", target.getUri());
-
         Invocation.Builder invocationBuilder = target.request();
         Response response = invocationBuilder.get();
 
