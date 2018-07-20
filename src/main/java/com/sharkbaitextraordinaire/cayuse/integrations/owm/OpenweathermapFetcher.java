@@ -14,12 +14,12 @@ import java.io.IOException;
 
 public class OpenweathermapFetcher {
 
-    private String ApiKey = "";
+    private String apiKey = "";
     private ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     private static String API_URL = "https://api.openweathermap.org/data/2.5/weather?zip=%s,us&APPID=%s";
 
     public OpenweathermapFetcher(String ApiKey) {
-        this.ApiKey = ApiKey;
+        this.apiKey = ApiKey;
 
     }
 
@@ -38,7 +38,7 @@ public class OpenweathermapFetcher {
         // should probably fail if we can't validate the zip code
         Configuration configuration = new ClientConfig();
         JerseyClient client = JerseyClientBuilder.createClient(configuration);
-        JerseyWebTarget target = client.target(String.format(API_URL, zipcode, ApiKey));
+        JerseyWebTarget target = client.target(String.format(API_URL, zipcode, apiKey));
 
         Invocation.Builder invocationBuilder = target.request();
         Response response = invocationBuilder.get();

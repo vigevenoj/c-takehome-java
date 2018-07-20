@@ -1,4 +1,4 @@
-package com.sharkbaitextraordinaire.integrations;
+package com.sharkbaitextraordinaire.integrations.owm;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
